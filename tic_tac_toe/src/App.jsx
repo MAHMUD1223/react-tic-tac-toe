@@ -10,6 +10,13 @@ function Square({ value, onSquareClick }) {
 export default function App() {
   const [xIsNext, setXIsNext] = useState(true);
   const [squares, setSquares] = useState(Array(9).fill(null));
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = "Winner is " + winner;
+  } else {
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
   const onSquareClickHandler = (i) => {
     if (squares[i] || calculateWinner(squares)) return;
     const nextSquares = squares.slice();
@@ -23,6 +30,7 @@ export default function App() {
   };
   return (
     <>
+      <div className='alert alert-info'>{status}</div>
       <div className='board-row'>
         <Square
           value={squares[0]}
@@ -65,6 +73,18 @@ export default function App() {
           onSquareClick={() => onSquareClickHandler(8)}
         />
       </div>
+      <button
+        onClick={() => {
+          setSquares(
+            squares.slice().map(() => {
+              return null;
+            })
+          );
+          setXIsNext(true);
+        }}
+      >
+        Reset
+      </button>
     </>
   );
 }
